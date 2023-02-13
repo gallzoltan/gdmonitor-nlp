@@ -15,6 +15,11 @@
 			<artifactId>nlp-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>hu.gallz</groupId>
+			<artifactId>configuration</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>com.itextpdf</groupId>

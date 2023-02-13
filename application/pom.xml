@@ -19,6 +19,7 @@
 			<artifactId>application-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>

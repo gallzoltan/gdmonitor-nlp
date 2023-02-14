@@ -1,5 +1,8 @@
 package hu.gallz.emailservice;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,10 @@ public class EwsService {
 	@Qualifier("ews")
 	private ExchangeService exchangeService;
 		
-	public Boolean sendEmail(MailContent content) {
-		try {
+	public Boolean sendEmail(MailContent content, List<HashMap<String, List<String>>> mailToList) {
+		try {			
 			EmailMessage msg = new EmailMessage(exchangeService);
+			
 			msg.setSubject("IX. fejezettel kapcsolatos kormányhatározat");
 			MessageBody mb = MessageBody.getMessageBodyFromText(createBody(content));
 			msg.setBody(mb);

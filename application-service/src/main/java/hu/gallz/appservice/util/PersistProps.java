@@ -44,29 +44,27 @@ public class PersistProps {
         }
         return lastdate;
     }
-    
-    public List<HashMap<String, List<String>>> readMailAddresses() {    	   	
-		List<HashMap<String, List<String>>> sendingAddresses = new ArrayList<>();
-		sendingAddresses.add(getAddresses("tomails"));
-		sendingAddresses.add(getAddresses("ccmails"));
-		sendingAddresses.add(getAddresses("bccmails"));
+     
+    public HashMap<String, List<String>> readMailAddresses() {
+		HashMap<String, List<String>> sendingAddresses = new HashMap<>();
+		sendingAddresses.put("tomails", getAddresses("tomails"));
+		sendingAddresses.put("ccmails", getAddresses("ccmails"));
+		sendingAddresses.put("bccmails", getAddresses("bccmails"));
 		
 		return sendingAddresses;    	
     }
     
-    private HashMap<String, List<String>> getAddresses(String key){
-    	HashMap<String, List<String>> result = new HashMap<>();
+    private List<String> getAddresses(String key){
     	List<String> maillist = new ArrayList<>();
     	try {
     		Wini ini = new Wini(new File(config.getLinks().getAppini()));
     		for (String name : ini.get(key).keySet()) {
     			maillist.add(ini.get(key, name));    		    
-    		}
-    		result.put(key, maillist);			
+    		}			
 		} catch (Exception e) {
 			logger.error("Read emails error: {}", e);
 			throw new RuntimeException(e);
 		}
-    	return result;
+    	return maillist;
     }
 }

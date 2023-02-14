@@ -20,10 +20,13 @@ public class AppService {
 	private PersistProps persistProps;
 
 	public String startService() {
-		MailContent content = new MailContent();
-		List<HashMap<String, List<String>>> mailToList = persistProps.readMailAddresses();
-		//System.out.println(maillist.toString());
-		ewsService.sendEmail(content, mailToList);
+		MailContent mailContent = new MailContent();
+		mailContent.setBulletinLink("Link");
+		mailContent.setBulletinNumber("1202/2023. (II. 14.)");
+		
+		HashMap<String, List<String>> mailToList = persistProps.readMailAddresses();		
+		
+		ewsService.sendEmail(mailContent, mailToList);
 		return "is run ok";
 	}
 }

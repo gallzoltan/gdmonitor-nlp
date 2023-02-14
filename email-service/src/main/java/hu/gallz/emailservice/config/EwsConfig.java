@@ -25,7 +25,7 @@ public class EwsConfig {
 	@Bean("ews")
 	public ExchangeService ewsMailService() {
 		ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
-        ExchangeCredentials credentials = new WebCredentials(config.getUsername(), config.getPassword()); 
+        ExchangeCredentials credentials = new WebCredentials(config.getUsername(), config.getPassword());
         service.setCredentials(credentials);
         try {
             service.setUrl(new URI(config.getLinks().getEwsuri()));

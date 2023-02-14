@@ -13,6 +13,7 @@ public class GdMonitorConfig {
 	
 	public class Links {
     	private String rssfeed;
+    	private String ewsuri;
         private String downpdf;
         private String appini;
         
@@ -21,6 +22,12 @@ public class GdMonitorConfig {
 		}
 		public void setRssfeed(String rssfeed) {
 			this.rssfeed = rssfeed;
+		}		
+		public String getEwsuri() {
+			return ewsuri;
+		}
+		public void setEwsuri(String ewsuri) {
+			this.ewsuri = ewsuri;
 		}
 		public String getDownpdf() {
 			return downpdf;

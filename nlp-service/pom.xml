@@ -6,6 +6,6 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>nlp-service</artifactId>
-  <name>NLP service</name>
+  <name>NLP Service</name>
   <description>Natural language processing (NLP) from nlpcloud.com. Runing a python script.</description>
 </project>

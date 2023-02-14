@@ -6,5 +6,5 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>configuration</artifactId>
-  <name>GDMonitor - configuration module</name>
+  <name>GDMonitor - Configuration Module</name>
 </project>

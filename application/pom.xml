@@ -6,14 +6,9 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>application</artifactId>
-	<name>GDMonitor - App module</name>
+	<name>GDMonitor - Main Module</name>
 	<description>Console application modul with main class</description>
 	<dependencies>
-		<dependency>
-			<groupId>hu.gallz</groupId>
-			<artifactId>email-service</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>hu.gallz</groupId>
 			<artifactId>application-service</artifactId>

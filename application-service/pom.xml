@@ -6,21 +6,26 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>application-service</artifactId>
-	<name>GDMonitor - Application Service</name>
+	<name>GDMonitor - Application Module Service</name>
 	<description>Application business logic</description>
 	<dependencies>
 		
 		<dependency>
 			<groupId>hu.gallz</groupId>
-			<artifactId>nlp-service</artifactId>
+			<artifactId>configuration</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>hu.gallz</groupId>
-			<artifactId>configuration</artifactId>
+			<artifactId>email-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>hu.gallz</groupId>
+			<artifactId>nlp-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+				
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itext7-core</artifactId>

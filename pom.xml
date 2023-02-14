@@ -9,7 +9,7 @@
 	<artifactId>gdmonitor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>GDMonitor</name>
+	<name>GDMonitor - Parent POM</name>
 	<description>Government decision monitor</description>
 	<properties>
 		<maven.compiler.release>17</maven.compiler.release>
@@ -36,10 +36,10 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>application</module>
-		<module>application-service</module>
+		<module>configuration</module>
 		<module>email-service</module>
 		<module>nlp-service</module>
-		<module>configuration</module>
+		<module>application-service</module>
+		<module>application</module>
 	</modules>
 </project>

@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import hu.gallz.appservice.AppService;
-import hu.gallz.emailservice.EwsService;
 
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
@@ -17,10 +16,7 @@ public class MainApplication implements CommandLineRunner {
 	
 	@Autowired
 	private AppService appService;
-	
-	@Autowired
-	private EwsService ewsService;
-	
+		
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
 	}
@@ -28,8 +24,11 @@ public class MainApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		logger.info("Console: started");
-		logger.info("AppService: {}", appService.initService());
-		logger.info("EmailService: {}", ewsService.initService());
+		logger.info("AppService: {}", appService.startService());
+//		logger.info("EmailService: {}", ewsService.initService());
+//		if(!appService.startService().equals("")) {
+//			ewsService.sendEmail(null);
+//		}
 	}
 
 }

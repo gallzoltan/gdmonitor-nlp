@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.ini4j.Profile.Section;
 import org.ini4j.Wini;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,13 +59,15 @@ public class PersistProps {
     	List<String> maillist = new ArrayList<>();
     	try {
     		Wini ini = new Wini(new File(config.getLinks().getAppini()));
-    		for (String name : ini.get(key).keySet()) {
+    		Section section = ini.get(key);
+    		for (String name: section.keySet()) {
     			maillist.add(ini.get(key, name));    		    
-    		}			
+    		}
+    		
+    		return maillist;
 		} catch (Exception e) {
 			logger.error("Read emails error: {}", e);
 			throw new RuntimeException(e);
-		}
-    	return maillist;
+		}    	    
     }
 }

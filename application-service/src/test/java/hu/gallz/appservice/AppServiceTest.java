@@ -10,9 +10,4 @@ public class AppServiceTest {
 	public void testThatTestIsWork() {
 		assertThat(1==1);
 	}
-	
-	@Test
-	public void testThatReadEmailAddresses() {
-		
-	}
 }

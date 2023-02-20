@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import hu.gallz.appservice.model.Feed;
 import hu.gallz.appservice.service.FeedService;
 import hu.gallz.configuration.GdMonitorConfig;
+import hu.gallz.nlpservice.NlpService;
 
 @Service
 public class AppService {
@@ -25,6 +26,9 @@ public class AppService {
 //	
 //	@Autowired
 //	private PersistProps persistProps;
+	
+	@Autowired
+	private NlpService nlpService;
 
 	public String startService() {
 		
@@ -37,6 +41,8 @@ public class AppService {
 //		mailContent.setBulletinNumber("1202/2023. (II. 14.)");		
 //		HashMap<String, List<String>> mailToList = persistProps.readMailAddresses();		
 //		ewsService.sendEmail(mailContent, mailToList);
+		
+		logger.info("NLP test: {}", nlpService.makeSummary("").toString());
 		
 		return "end.";
 	}

@@ -6,7 +6,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>application</artifactId>
-	<name>GDMonitor - Main Module</name>
+	<name>GDMonitor - Application</name>
 	<description>Console application modul with main class</description>
 	<dependencies>
 		<dependency>

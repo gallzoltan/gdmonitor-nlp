@@ -6,7 +6,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>application-service</artifactId>
-	<name>GDMonitor - Application Module Service</name>
+	<name>GDMonitor - Application Service</name>
 	<description>Application business logic</description>
 	<dependencies>
 		

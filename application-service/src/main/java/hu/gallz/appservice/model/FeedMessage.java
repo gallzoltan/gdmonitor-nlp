@@ -23,5 +23,10 @@ public class FeedMessage {
 	public void setPubdate(String pubdate) {
 		this.pubdate = pubdate;
 	}
+	
+	@Override
+	public String toString() {
+		return "FeedMessage [title=" + title + ", pubdate=" + pubdate + "]";
+	}
     
 }

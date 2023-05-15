@@ -3,6 +3,7 @@ package hu.gallz.appservice.repository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Optional;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.stream.XMLEventReader;
@@ -25,7 +26,7 @@ public class FeedRepository {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FeedRepository.class);
 
-	public Feed searchFeed(URL feedUrl){		
+	public Optional<Feed> searchFeed(URL feedUrl){		
         Feed feedResult = null;
         try {
         	boolean isFeedHeader = true;
@@ -71,7 +72,7 @@ public class FeedRepository {
 			logger.error("Error on Feed search");
             throw new RuntimeException(e);
 		} 
-        return feedResult;
+        return Optional.ofNullable(feedResult);
 	}
 	
 	private InputStream read(URL url) {

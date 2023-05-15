@@ -21,10 +21,10 @@ public class EwsConfig {
 	
 	@Autowired
 	private GdMonitorConfig config;
-	
-	@Bean("ews")
-	public ExchangeService ewsMailService() {
-		ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
+
+    @Bean("ews")
+    ExchangeService ewsMailService() {
+        ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(config.getUsername(), config.getPassword());
         service.setCredentials(credentials);
         try {
@@ -32,7 +32,7 @@ public class EwsConfig {
         } catch (URISyntaxException ex) {
             logger.info("Error on set exchange URI - {}", ex);
         }
-        
+
         return service;
-	}
+    }
 }

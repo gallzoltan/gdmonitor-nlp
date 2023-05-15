@@ -44,4 +44,10 @@ public class Feed {
         }
         this.messages.add(message);
     }
+
+//	@Override
+//	public String toString() {
+//		return "Feed [title=" + title + ", lastbuilddate=" + lastbuilddate + ", messages=" + messages + "]";
+//	}
+		
 }

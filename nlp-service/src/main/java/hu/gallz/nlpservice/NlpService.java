@@ -32,7 +32,7 @@ public class NlpService {
 	}
 	
 	private String resolvePythonScriptPath(String filename) {
-        File file = new File("src/main/resources/python" + filename);
+        File file = new File("src/main/resources/python/" + filename);
         return file.getAbsolutePath();
     }
 	

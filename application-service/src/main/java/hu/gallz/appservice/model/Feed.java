@@ -1,7 +1,10 @@
 package hu.gallz.appservice.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Feed {
 	private String title;
@@ -28,6 +31,12 @@ public class Feed {
 
 	public void setLastbuilddate(String lastbuilddate) {
 		this.lastbuilddate = lastbuilddate;
+	}
+	
+	public LocalDateTime getLastBuildDateTime() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+		if(this.lastbuilddate == null) return null;
+		return LocalDateTime.parse(this.lastbuilddate, formatter);
 	}
 
 	public List<FeedMessage> getMessages() {

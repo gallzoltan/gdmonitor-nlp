@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import hu.gallz.appservice.model.Feed;
 import hu.gallz.appservice.model.FeedMessage;
 import hu.gallz.appservice.service.FeedService;
+import hu.gallz.appservice.util.PersistProps;
 import hu.gallz.configuration.GdMonitorConfig;
 
 @Service
@@ -23,20 +24,20 @@ public class AppService {
 	@Autowired
 	private FeedService feedService;
 	
+	@Autowired
+	private PersistProps persistProps;
+
 //	@Autowired
 //	private EwsService ewsService;
-	
-//	@Autowired
-//	private PersistProps persistProps;
 	
 //	@Autowired
 //	private NlpService nlpService;
 
 	public String startService() {
 		Feed feed = feedService.getFeed(config.getLinks().getRssfeed()); 
-		if(feed == null) return "There is no feed";			
-		
-		List<FeedMessage> feedMessages = feedService.getLastFeedMessages(feed);
+		if(feed == null) return "There is no feed";	
+				
+		List<FeedMessage> feedMessages = feedService.getLastFeedMessages(feed, persistProps.readMonitorLatest());
 		logger.info("RSS Messages: {}", feedMessages.toString());
 		
 //		MailContent mailContent = new MailContent();

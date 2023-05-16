@@ -25,6 +25,7 @@ public class MainApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		logger.info("Console: started");
 		logger.info("AppService: {}", appService.startService());
+		
 //		logger.info("EmailService: {}", ewsService.initService());
 //		if(!appService.startService().equals("")) {
 //			ewsService.sendEmail(null);

@@ -2,6 +2,7 @@ package hu.gallz.appservice.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,16 +35,16 @@ public class PersistProps {
         }
     }
 
-    public String readMonitorLatest() {
-        String lastdate;
+    public LocalDateTime readMonitorLatest() {
         try {
             Wini ini = new Wini(new File(config.getLinks().getAppini()));
-            lastdate = ini.get("monitor", "latest");
+            String latest = ini.get("monitor", "latest");
+            
+            return LocalDateTime.parse(latest);
         } catch (IOException ex) {
         	logger.error("Read monitor error: {}", ex);
             throw new RuntimeException(ex);
         }
-        return lastdate;
     }
      
     public HashMap<String, List<String>> readMailAddresses() {

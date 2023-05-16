@@ -1,5 +1,6 @@
 package hu.gallz.appservice;
 
+import java.util.Base64;
 import java.util.List;
 
 import org.slf4j.Logger;

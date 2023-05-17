@@ -3,6 +3,8 @@ package hu.gallz.appservice.model;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class FeedMessage {
@@ -11,6 +13,7 @@ public class FeedMessage {
     private String pubdate; 
     private String pdf;
     private Path pdfPath;
+    private List<PdfContent> pdfContents;
     
 	public FeedMessage() {
 		super();
@@ -82,9 +85,23 @@ public class FeedMessage {
 		this.pdfPath = pdfPath;
 	}
 
+	public List<PdfContent> getPdfContents() {
+		return pdfContents;
+	}
+
+	public void setPdfContents(List<PdfContent> pdfContents) {
+		this.pdfContents = pdfContents;
+	}
+	
+	public void addPdfContent(PdfContent content) {
+		if(this.pdfContents==null)
+			this.pdfContents = new ArrayList<>();
+		this.pdfContents.add(content);
+	}
+
 	@Override
 	public String toString() {
-		return "FeedMessage [title=" + title + ", pubdate=" + pubdate + ", pdf="+ pdf + "]";
+		return "FeedMessage [title=" + title + ", pubdate=" + pubdate + ", pdf=" + pdf + ", pdfContents=" + pdfContents + "]";
 	}
     
 }

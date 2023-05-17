@@ -43,8 +43,9 @@ public class AppService {
 		List<FeedMessage> feedMessages = searchFeedMessages();
 		
 		if(feedMessages.size() > 0 ) {
-			logger.info("{}", feedMessages.toString());
-			//pdfService.readPages(feedMessages);
+			logger.info("to examine: {}", feedMessages.toString());
+			List<FeedMessage> afterFeedMessages = pdfService.readPages(feedMessages);
+			logger.info("examine: {}", afterFeedMessages.toString());
 		}
 		
 		

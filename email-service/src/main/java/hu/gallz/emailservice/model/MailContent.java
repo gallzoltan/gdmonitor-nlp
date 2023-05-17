@@ -1,5 +1,6 @@
 package hu.gallz.emailservice.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MailContent {
@@ -31,5 +32,10 @@ public class MailContent {
 	public void setBulletinPages(List<Integer> bulletinPages) {
 		this.bulletinPages = bulletinPages;
 	}
-    
+	public void addBulletinPage(Integer page){
+        if(this.bulletinPages == null) {
+            this.bulletinPages = new ArrayList<>();
+        }
+        this.bulletinPages.add(page);
+    }
 }

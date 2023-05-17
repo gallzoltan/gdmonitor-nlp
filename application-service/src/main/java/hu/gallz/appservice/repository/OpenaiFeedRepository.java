@@ -2,6 +2,7 @@ package hu.gallz.appservice.repository;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import hu.gallz.appservice.model.FeedMessage;
+import hu.gallz.appservice.util.FeedNodes;
+import hu.gallz.appservice.util.StringConstants;
 
 @Component("openai")
 public class OpenaiFeedRepository implements FeedRepository {
@@ -34,8 +37,8 @@ public class OpenaiFeedRepository implements FeedRepository {
             Document doc = builder.parse(feedUrl.openStream());
 
             doc.getDocumentElement().normalize();
-            Element channelElement = (Element) doc.getElementsByTagName("channel").item(0);
-            lastBuildDate = getElementValue(channelElement, "lastBuildDate");
+            Element channelElement = (Element) doc.getElementsByTagName(FeedNodes.CHANNEL).item(0);
+            lastBuildDate = getElementValue(channelElement, FeedNodes.LASTBUILD_DATE);
             
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			logger.error("Error on findBuildDate(): {}", e);
@@ -44,6 +47,41 @@ public class OpenaiFeedRepository implements FeedRepository {
 		return lastBuildDate;
 	}
 
+	@Override
+	public List<FeedMessage> findItemsFromDate(URL feedUrl, LocalDateTime lastReadingDate) {
+		List<FeedMessage> items = new ArrayList<>();
+		
+		try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(feedUrl.openStream());
+
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getElementsByTagName(FeedNodes.ITEM);
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String type = getAttributeValue(element, FeedNodes.ENCLOSURE, "type");
+                    if (StringConstants.ENCLOSURE_TYPE.equals(type)) {
+                    	String title = getElementValue(element, FeedNodes.TITLE);
+                        String link = getElementValue(element, FeedNodes.LINK);
+                        String pubDate = getElementValue(element, FeedNodes.PUB_DATE);
+                        FeedMessage item = new FeedMessage(title, link, pubDate);
+                        if (lastReadingDate.isBefore(item.getPubDateTime())) {                        	
+                        	items.add(item);
+                        }
+                    }                    
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+        	logger.error("Error on findItems(): {}", e);
+        }
+		
+		return items;
+	}
+	
 	@Override
 	public List<FeedMessage> findItems(URL feedUrl) {
 		List<FeedMessage> items = new ArrayList<>();
@@ -54,18 +92,18 @@ public class OpenaiFeedRepository implements FeedRepository {
             Document doc = builder.parse(feedUrl.openStream());
 
             doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getElementsByTagName("item");
+            NodeList nodeList = doc.getElementsByTagName(FeedNodes.ITEM);
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node node = nodeList.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    String type = getAttributeValue(element, "enclosure", "type");
-                    if ("Magyar Közlöny".equals(type)) {
-                    	String title = getElementValue(element, "title");
-                        String link = getElementValue(element, "link");
-                        String pubDate = getElementValue(element, "pubDate");
-
+                    String type = getAttributeValue(element, FeedNodes.ENCLOSURE, "type");
+                    if (StringConstants.ENCLOSURE_TYPE.equals(type)) {
+                    	String title = getElementValue(element, FeedNodes.TITLE);
+                        String link = getElementValue(element, FeedNodes.LINK);
+                        String pubDate = getElementValue(element, FeedNodes.PUB_DATE);
+                        
                         FeedMessage item = new FeedMessage(title, link, pubDate);
                         items.add(item);
                     }                    
@@ -74,8 +112,8 @@ public class OpenaiFeedRepository implements FeedRepository {
         } catch (ParserConfigurationException | SAXException | IOException e) {
         	logger.error("Error on findItems(): {}", e);
         }
-
-        return items;
+		
+		return items;
 	}
 	
 	private String getElementValue(Element parentElement, String elementName) {

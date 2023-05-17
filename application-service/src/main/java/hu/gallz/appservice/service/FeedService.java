@@ -40,9 +40,9 @@ public class FeedService {
 		return result;
 	}
 	
-	public List<FeedMessage> getFeedMessages(String url) {
+	public List<FeedMessage> getFeedMessages(String url, LocalDateTime lastReadingDate) {
 		URL feedUrl = isValid(url);
-		return feedRepository.findItems(feedUrl);
+		return feedRepository.findItemsFromDate(feedUrl, lastReadingDate);
 	}
 	
 	private URL isValid(String url){

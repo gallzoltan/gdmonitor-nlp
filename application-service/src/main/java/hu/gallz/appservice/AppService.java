@@ -1,6 +1,5 @@
 package hu.gallz.appservice;
 
-import java.util.Base64;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import hu.gallz.appservice.model.Feed;
 import hu.gallz.appservice.model.FeedMessage;
 import hu.gallz.appservice.service.FeedService;
 import hu.gallz.appservice.util.PersistProps;
@@ -35,11 +33,14 @@ public class AppService {
 //	private NlpService nlpService;
 
 	public String startService() {
-		Feed feed = feedService.getFeed(config.getLinks().getRssfeed()); 
-		if(feed == null) return "There is no feed";	
-				
-		List<FeedMessage> feedMessages = feedService.getLastFeedMessages(feed, persistProps.readMonitorLatest());
-		logger.info("RSS Messages: {}", feedMessages.toString());
+//		Feed feed = feedService.getFeed(config.getLinks().getRssfeed()); 
+//		if(feed == null) return "There is no feed";	
+		Boolean isNewFeed = feedService.isNewFeed(config.getLinks().getRssfeed(), persistProps.readMonitorLatest());
+		if(isNewFeed) {
+			List<FeedMessage> feedMessages = feedService.getFeedMessages(config.getLinks().getRssfeed());
+			logger.info("items: {}", feedMessages.toString());
+		}
+		
 		
 //		MailContent mailContent = new MailContent();
 //		mailContent.setBulletinLink("Link");

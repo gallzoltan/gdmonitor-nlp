@@ -3,15 +3,16 @@ package hu.gallz.appservice.service;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import hu.gallz.appservice.model.Feed;
 import hu.gallz.appservice.model.FeedMessage;
 import hu.gallz.appservice.repository.FeedRepository;
 
@@ -21,26 +22,27 @@ public class FeedService {
 	private static final Logger logger = LoggerFactory.getLogger(FeedService.class);	
 	
 	@Autowired
-	private FeedRepository feedRepository;	
-		
-	public Feed getFeed(String url) {		
-		URL feedUrl = isValid(url);
-		return feedRepository.searchFeed(feedUrl).orElse(null);
-	}
+	@Qualifier("openai")
+	private FeedRepository feedRepository;
 	
-	public List<FeedMessage> getLastFeedMessages(Feed feed, LocalDateTime lastReadingDate) {		
-		List<FeedMessage> result = new ArrayList<>();
-		
-		if (lastReadingDate.isBefore(feed.getLastBuildDateTime())) {
-			for(FeedMessage fm: feed.getMessages()) {
-				if (lastReadingDate.isBefore(fm.getPubDateTime())) {
-					if(fm.getTitle().contains("Magyar Közlöny")) {
-						result.add(fm);
-					}
-				}
+	public Boolean isNewFeed(String url, LocalDateTime lastReadingDate) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+		Boolean result = false;
+		URL feedUrl = isValid(url);
+		String lastBuildDate = feedRepository.findBuildDate(feedUrl);
+		if(!lastBuildDate.isEmpty()) {
+			LocalDateTime builddate = LocalDateTime.parse(lastBuildDate, formatter);
+			if (lastReadingDate.isBefore(builddate)) {
+				result = true;
 			}
 		}
+		
 		return result;
+	}
+	
+	public List<FeedMessage> getFeedMessages(String url) {
+		URL feedUrl = isValid(url);
+		return feedRepository.findItems(feedUrl);
 	}
 	
 	private URL isValid(String url){

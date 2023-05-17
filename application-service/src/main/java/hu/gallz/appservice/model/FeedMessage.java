@@ -7,8 +7,19 @@ import java.util.Locale;
 public class FeedMessage {
 	private String title;
     private String link;
-    private String pubdate;
+    private String pubdate;    
     
+	public FeedMessage() {
+		super();
+	}
+		
+	public FeedMessage(String title, String link, String pubdate) {
+		super();
+		this.title = title;
+		this.link = link;
+		this.pubdate = pubdate;
+	}
+
 	public String getTitle() {
 		return title;
 	}

@@ -8,8 +8,10 @@
 	<artifactId>application-service</artifactId>
 	<name>GDMonitor - Application Service</name>
 	<description>Application business logic</description>
+	<properties>
+		<pdfbox.version>2.0.24</pdfbox.version>
+	</properties>
 	<dependencies>
-		
 		<dependency>
 			<groupId>hu.gallz</groupId>
 			<artifactId>configuration</artifactId>
@@ -25,12 +27,22 @@
 			<artifactId>nlp-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-				
-		<dependency>
+		<!--<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itext7-core</artifactId>
 			<version>7.2.4</version>
 			<type>pom</type>
+		</dependency>-->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>${pdfbox.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

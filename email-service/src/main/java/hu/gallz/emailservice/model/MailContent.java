@@ -7,7 +7,9 @@ public class MailContent {
 	private String pubDate;
     private String bulletinNumber;
     private String bulletinLink;
+    private String bulletinSummary;
     private List<Integer> bulletinPages;
+    
 	public String getPubDate() {
 		return pubDate;
 	}
@@ -31,6 +33,12 @@ public class MailContent {
 	}
 	public void setBulletinPages(List<Integer> bulletinPages) {
 		this.bulletinPages = bulletinPages;
+	}	
+	public String getBulletinSummary() {
+		return bulletinSummary;
+	}
+	public void setBulletinSummary(String bulletinSummary) {
+		this.bulletinSummary = bulletinSummary;
 	}
 	public void addBulletinPage(Integer page){
         if(this.bulletinPages == null) {

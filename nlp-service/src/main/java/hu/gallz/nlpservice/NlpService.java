@@ -20,7 +20,7 @@ public class NlpService {
 	
 	public List<String> makeSummary(String content) {
 		List<String> results = null;
-		ProcessBuilder processBuilder = new ProcessBuilder("python", resolvePythonScriptPath("nlp_summary.py"));
+		ProcessBuilder processBuilder = new ProcessBuilder("python", resolvePythonScriptPath("nlp_summary.py"), "-cnt", content);
 		processBuilder.redirectErrorStream(true);
 		try {
 			Process process = processBuilder.start();

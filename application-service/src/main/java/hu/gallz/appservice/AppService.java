@@ -69,12 +69,14 @@ public class AppService {
 					foundFeedMessages.add(feedMessage);
 			}
 			
-			logger.info("Megjelent közlöny: {}", feedMessages.size());
-			logger.info("Vizsgálandó közlöny: {}", foundFeedMessages.size());
+			logger.info("Megjelent / Releváns közlöny: {}/{} db", feedMessages.size(), foundFeedMessages.size());
 		}
 		
 		if(foundFeedMessages.size() > 0) {
-			sendEmail(foundFeedMessages);			
+			for(FeedMessage feed: foundFeedMessages) {
+				//if(sendEmail(feed)) persistProps.writeMonitorLatest(null);
+			}
+						
 		}
 		
 		
@@ -83,22 +85,20 @@ public class AppService {
 		return "end.";
 	}
 	
-	private void sendEmail(List<FeedMessage> foundFeedMessages) {
-		for(FeedMessage feed: foundFeedMessages) {
-			MailContent mailContent = new MailContent();
-			
-			mailContent.setBulletinNumber(feed.getTitle());
-			mailContent.setPubDate(feed.getPubdate());
-			mailContent.setBulletinLink(feed.getLink());
-			feed.getPdfContents().forEach(c -> {				
-				mailContent.addDecreeInfo(new DecreeInfo(c.getPgnumber(), c.getDecree()));
-				//mailContent.addBulletinPage(c.getPgnumber());
-            });
-			HashMap<String, List<String>> mailToList = persistProps.readMailAddresses();		
-			if(ewsService.sendEmail(mailContent, mailToList)) {
-				logger.info("ready.");
-			}
+	private Boolean sendEmail(FeedMessage feed) {
+		MailContent mailContent = new MailContent();		
+		mailContent.setBulletinNumber(feed.getTitle());
+		mailContent.setPubDate(feed.getPubdate());
+		mailContent.setBulletinLink(feed.getLink());
+		feed.getPdfContents().forEach(c -> {				
+			mailContent.addDecreeInfo(new DecreeInfo(c.getPgnumber(), c.getDecree()));
+        });
+		HashMap<String, List<String>> mailToList = persistProps.readMailAddresses();		
+		if(ewsService.sendEmail(mailContent, mailToList)) {
+			logger.info("ready.");
+			return true;
 		}		
+		return false;
 	}
 	
 	private List<FeedMessage> searchFeedMessages() {

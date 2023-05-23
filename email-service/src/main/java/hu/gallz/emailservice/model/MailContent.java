@@ -7,7 +7,9 @@ public class MailContent {
 	private String pubDate;
     private String bulletinNumber;
     private String bulletinLink;
-    private List<Integer> bulletinPages;
+    //private List<Integer> bulletinPages;
+    private List<DecreeInfo> decreeInfos;
+    
 	public String getPubDate() {
 		return pubDate;
 	}
@@ -26,16 +28,29 @@ public class MailContent {
 	public void setBulletinLink(String bulletinLink) {
 		this.bulletinLink = bulletinLink;
 	}
-	public List<Integer> getBulletinPages() {
-		return bulletinPages;
+//	public List<Integer> getBulletinPages() {
+//		return bulletinPages;
+//	}
+//	public void setBulletinPages(List<Integer> bulletinPages) {
+//		this.bulletinPages = bulletinPages;
+//	}
+	
+	public List<DecreeInfo> getDecreeIfos() {
+		return decreeInfos;
 	}
-	public void setBulletinPages(List<Integer> bulletinPages) {
-		this.bulletinPages = bulletinPages;
+	public void setDecreeIfos(List<DecreeInfo> decreeInfos) {
+		this.decreeInfos = decreeInfos;
 	}
-	public void addBulletinPage(Integer page){
-        if(this.bulletinPages == null) {
-            this.bulletinPages = new ArrayList<>();
+//	public void addBulletinPage(Integer page){
+//        if(this.bulletinPages == null) {
+//            this.bulletinPages = new ArrayList<>();
+//        }
+//        this.bulletinPages.add(page);
+//    }
+	public void addDecreeInfo(DecreeInfo info){
+        if(this.decreeInfos == null) {
+            this.decreeInfos = new ArrayList<>();
         }
-        this.bulletinPages.add(page);
+        this.decreeInfos.add(info);
     }
 }

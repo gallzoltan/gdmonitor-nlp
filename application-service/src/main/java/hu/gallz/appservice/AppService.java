@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hu.gallz.appservice.model.FeedMessage;
+import hu.gallz.appservice.model.PdfContent;
 import hu.gallz.appservice.service.FeedService;
 import hu.gallz.appservice.service.GovernmentDecreeService;
 import hu.gallz.appservice.service.DownloadService;
@@ -48,19 +50,30 @@ public class AppService {
 
 	public String startService() {
 		List<FeedMessage> feedMessages = searchFeedMessages();
-		List<FeedMessage> afterFeedMessages = new ArrayList<>();
+		List<FeedMessage> foundFeedMessages = new ArrayList<>();
 		
 		if(feedMessages.size() > 0 ) {
-			for(FeedMessage feedMessage: afterFeedMessages) {
-				governmentDecreeService.extractGovernmentDecree(feedMessage.getPdfPath().toFile());
+			for(FeedMessage feedMessage: feedMessages) {
+				Boolean flag = false;
+				Set<Integer> foundPages = governmentDecreeService.findKeywords(feedMessage.getPdfPath().toFile());
+				if(foundPages != null) {
+					for(int pageNumber: foundPages) {
+						String decreeNumber = governmentDecreeService.extractGovernmentDecree(feedMessage.getPdfPath().toFile(), pageNumber);
+						PdfContent content = new PdfContent(pageNumber, decreeNumber, "");
+						feedMessage.addPdfContent(content);
+						flag = true;
+					}
+				}
+				if(flag)
+					foundFeedMessages.add(feedMessage);
 			}
-			//afterFeedMessages = pdfService.readPages(feedMessages);
+			
 			logger.info("to examine: {}", feedMessages.size());
-			logger.info("examine: {}", afterFeedMessages.size());
+			logger.info("examine: {}", foundFeedMessages.size());
 		}
 		
-		if(afterFeedMessages.size() > 0) {
-			sendEmail(afterFeedMessages);			
+		if(foundFeedMessages.size() > 0) {
+			sendEmail(foundFeedMessages);			
 		}
 		
 		
@@ -69,14 +82,15 @@ public class AppService {
 		return "end.";
 	}
 	
-	private void sendEmail(List<FeedMessage> afterFeedMessages) {
-		for(FeedMessage feed: afterFeedMessages) {
+	private void sendEmail(List<FeedMessage> foundFeedMessages) {
+		for(FeedMessage feed: foundFeedMessages) {
 			MailContent mailContent = new MailContent();
 			
 			mailContent.setBulletinNumber(feed.getTitle());
 			mailContent.setPubDate(feed.getPubdate());
 			mailContent.setBulletinLink(feed.getLink());
-			feed.getPdfContents().forEach(c -> {                                    
+			feed.getPdfContents().forEach(c -> {
+				
 				mailContent.addBulletinPage(c.getPgnumber());
             });
 			HashMap<String, List<String>> mailToList = persistProps.readMailAddresses();		
@@ -96,7 +110,7 @@ public class AppService {
 			for(FeedMessage feedmessage: result) {
 				String fileName = String.format("MK_%s.szám.pdf", feedmessage.getTitleNumber());
 				if(downloadService.downloadPDF(feedmessage.getDownloadLink(), config.getLinks().getDownpdf(), fileName)) {
-					feedmessage.setPdf(fileName);
+					feedmessage.setPdfFile(fileName);
 					feedmessage.setPdfPath(Path.of(config.getLinks().getDownpdf(), fileName));
 				}
 			}

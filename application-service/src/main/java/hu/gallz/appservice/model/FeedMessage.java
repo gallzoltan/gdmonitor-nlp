@@ -11,7 +11,7 @@ public class FeedMessage {
 	private String title;
     private String link;
     private String pubdate; 
-    private String pdf;
+    private String pdfFile;
     private Path pdfPath;
     private List<PdfContent> pdfContents;
     
@@ -69,12 +69,12 @@ public class FeedMessage {
 		this.pubdate = pubdate;
 	}
 
-	public String getPdf() {
-		return pdf;
+	public String getPdfFile() {
+		return pdfFile;
 	}
 
-	public void setPdf(String pdf) {
-		this.pdf = pdf;
+	public void setPdfFile(String pdfFile) {
+		this.pdfFile = pdfFile;
 	}
 
 	public Path getPdfPath() {
@@ -101,7 +101,7 @@ public class FeedMessage {
 
 	@Override
 	public String toString() {
-		return "FeedMessage [title=" + title + ", pubdate=" + pubdate + ", pdf=" + pdf + ", pdfContents=" + pdfContents + "]";
+		return "FeedMessage [title=" + title + ", pubdate=" + pubdate + ", pdfFile=" + pdfFile + ", pdfContents=" + pdfContents + "]";
 	}
     
 }

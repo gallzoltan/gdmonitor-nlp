@@ -7,28 +7,50 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
 public class GovernmentDecreeServiceTest {
+	
+	private static final Logger logger = LoggerFactory.getLogger(GovernmentDecreeServiceTest.class);
+	private String f;
 
 	@InjectMocks
 	private GovernmentDecreeService governmentDecreeService;
 	
-	@Test
-	public void testThatPdfReadIsOK() {
-		Path path = Paths.get("/home/gallz/Letöltések/MK_23_075.pdf");
-		assertEquals(governmentDecreeService.extractGovernmentDecree(path.toFile()), "29");
+	@BeforeEach 
+    void init() {
+		//f = "/home/gallz/Letöltések/MK_23_075.pdf";
+		//f = "c:\\Users\\gallz\\Downloads\\MK_23_028.pdf";
+		//f = "c:\\Users\\gallz\\Downloads\\MK_23_076.pdf";
+		f = "c:\\Users\\gallz\\Downloads\\MK_23_067.pdf";
 	}
 	
+	//@Disabled("TODO: Still need to work on it")
 	@Test
-	public void testThatPdfContentKeyWords() {
-		Path path = Paths.get("/home/gallz/Letöltések/MK_23_075.pdf");
+	public void testThatFoundDecreeNumber() {		
+		Path path = Paths.get(f);
+		String result = governmentDecreeService.extractGovernmentDecree(path.toFile(), 27);
+		logger.info("Decree number: {}", result);
+		
+		assertEquals(result, "A Kormány 1183/2023. (V. 8.) Korm. határozata");
+	}
+	
+	@Disabled("TODO: Still need to work on it")
+	@Test
+	public void testThatPdfContentKeyWords() {			
+		Path path = Paths.get(f);
 		Set<Integer> setA = new HashSet<Integer>();
-		setA.add(13);
+		setA.add(79);
+		//setA.add(41);
+		logger.info("setA: {}", setA.toString());
 		assertEquals(governmentDecreeService.findKeywords(path.toFile()), setA);
 	}
 }

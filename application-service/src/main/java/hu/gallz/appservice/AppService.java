@@ -69,8 +69,7 @@ public class AppService {
 					foundFeedMessages.add(feedMessage);
 			}
 			
-			logger.info("Megjelent közlöny: {}", feedMessages.size());
-			logger.info("Vizsgálandó közlöny: {}", foundFeedMessages.size());
+			logger.info("Megjelent / Releváns közlöny: {}/{} db", feedMessages.size(), foundFeedMessages.size());
 		}
 		
 		if(foundFeedMessages.size() > 0) {

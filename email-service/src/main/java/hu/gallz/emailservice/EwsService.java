@@ -53,7 +53,7 @@ public class EwsService {
 	public String createBody(MailContent msg) {
 		return String.format("<p><a href=\"%s\">%s</a></p>"
                 + "<p>Dátum: %s</p>"
-                + "<p>Oldalszámok: %s</p>", msg.getBulletinLink(), msg.getBulletinNumber(), msg.getPubDate(), msg.getBulletinPages());
+                + "<p>Találatok: %s</p>", msg.getBulletinLink(), msg.getBulletinNumber(), msg.getPubDate(), msg.getDecreeInfos());
 	}
 
 }

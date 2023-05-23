@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -35,6 +37,7 @@ public class GovernmentDecreeService {
 				}
 			}
 			document.close();
+			
 			return foundPages;
 		} catch (IOException e) {
 			logger.info("Pdf read error: {}", e.getMessage());
@@ -42,66 +45,43 @@ public class GovernmentDecreeService {
 		return null;
 	}
 	
-	public String extractGovernmentDecree(File pdfFile) {
+	public String extractGovernmentDecree(File pdfFile, int startPage) {
 		PDDocument document;
-		int numberOfPages = 0;
 		try {
 			PDFTextStripper stripper = new PDFTextStripper();
-			document = PDDocument.load(pdfFile);			
-	        numberOfPages = document.getNumberOfPages();
+			document = PDDocument.load(pdfFile);
 	        
-	        StringBuilder governmentDecreeBuilder = new StringBuilder();
-	        boolean foundGovernmentDecree = false;
-	        boolean startedGovernmentDecree = false;
-	        
-	        for (int i = 1; i <= numberOfPages; i++) {
-	        	stripper.setStartPage(i);
-	            stripper.setEndPage(i);
-	            
-	            String pageText = stripper.getText(document);
-	            
-	            // Az oldal szövegében keresd meg a kormányhatározat kezdetét és végét jelző szövegeket.
-	            if (pageText.contains(".) Korm. rendelete")) {
-	                foundGovernmentDecree = true;
-	                startedGovernmentDecree = true;
-	                governmentDecreeBuilder.append(pageText);
-	            } else if (startedGovernmentDecree) {
-	                governmentDecreeBuilder.append(pageText);
-
-	                // Ellenőrizzük, hogy az oldal tartalmazza-e a kormányhatározat végét jelző szöveget.
-	                if (pageText.contains("Orbán Viktor s. k., miniszterelnök")) {
-	                    startedGovernmentDecree = false;
-	                }
-	            }
-	        }
+	        stripper.setStartPage(startPage);
+            stripper.setEndPage(startPage);
+            String pageText = stripper.getText(document);
+            
 	        document.close();
-	        //return governmentDecreeBuilder.toString();
+	        return findDecreeNumber(pageText);
 		} catch (IOException e) {
 			logger.info("Pdf read error: {}", e.getMessage());
 		}
         
-        return String.valueOf(numberOfPages);
+        return "";
 	}
 	
-//	private PDDocument getDocument(File pdfFile) {
-//		PDDocument document = null;
-//		try {
-//			return PDDocument.load(pdfFile);
-//		} catch (IOException e) {
-//			logger.info("Pdf read error: {}", e.getMessage());
-//		}
-//		return document;
-//	}
-//	
-//	private String getPageText(int startOfPage, int endOfPage, PDDocument document) {
-//		try {
-//			PDFTextStripper stripper = new PDFTextStripper();
-//			stripper.setStartPage(startOfPage);
-//            stripper.setEndPage(endOfPage);
-//            return stripper.getText(document);
-//		} catch (IOException e) {
-//			logger.info("Pdf stripper error: {}", e.getMessage());
-//		}
-//		return null;
-//	}
+	private String findDecreeNumber(String content) {
+	    Pattern pattern = Pattern.compile(StringConstants.REG_DECREE_NUMBER);
+	    Matcher matcher = pattern.matcher(content);
+	    String closestNumber = null;
+	    int closestDistance = Integer.MAX_VALUE;
+	    int keywordPosition = Integer.MAX_VALUE;
+
+	    while (matcher.find()) {
+	        int matchStart = matcher.start();
+	        //int matchEnd = matcher.end();
+	        int distance = Math.abs(matchStart - keywordPosition);
+
+	        if (distance < closestDistance) {
+	            closestDistance = distance;
+	            closestNumber = matcher.group();
+	        }
+	    }
+
+	    return closestNumber;
+	}
 }

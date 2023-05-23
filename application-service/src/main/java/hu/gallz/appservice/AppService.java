@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 import hu.gallz.appservice.model.FeedMessage;
 import hu.gallz.appservice.service.FeedService;
-import hu.gallz.appservice.service.PdfService;
+import hu.gallz.appservice.service.GovernmentDecreeService;
+import hu.gallz.appservice.service.DownloadService;
 import hu.gallz.appservice.util.PersistProps;
 import hu.gallz.configuration.GdMonitorConfig;
 import hu.gallz.emailservice.EwsService;
@@ -34,7 +35,10 @@ public class AppService {
 	private PersistProps persistProps;
 	
 	@Autowired
-	private PdfService pdfService;
+	private DownloadService downloadService;
+	
+	@Autowired
+	private GovernmentDecreeService governmentDecreeService;
 
 	@Autowired
 	private EwsService ewsService;
@@ -46,8 +50,11 @@ public class AppService {
 		List<FeedMessage> feedMessages = searchFeedMessages();
 		List<FeedMessage> afterFeedMessages = new ArrayList<>();
 		
-		if(feedMessages.size() > 0 ) {			
-			afterFeedMessages = pdfService.readPages(feedMessages);
+		if(feedMessages.size() > 0 ) {
+			for(FeedMessage feedMessage: afterFeedMessages) {
+				governmentDecreeService.extractGovernmentDecree(feedMessage.getPdfPath().toFile());
+			}
+			//afterFeedMessages = pdfService.readPages(feedMessages);
 			logger.info("to examine: {}", feedMessages.size());
 			logger.info("examine: {}", afterFeedMessages.size());
 		}
@@ -88,7 +95,7 @@ public class AppService {
 			result = feedService.getFeedMessages(rssfeed, readMonitorLatest);
 			for(FeedMessage feedmessage: result) {
 				String fileName = String.format("MK_%s.szám.pdf", feedmessage.getTitleNumber());
-				if(pdfService.downloadPDF(feedmessage.getDownloadLink(), config.getLinks().getDownpdf(), fileName)) {
+				if(downloadService.downloadPDF(feedmessage.getDownloadLink(), config.getLinks().getDownpdf(), fileName)) {
 					feedmessage.setPdf(fileName);
 					feedmessage.setPdfPath(Path.of(config.getLinks().getDownpdf(), fileName));
 				}

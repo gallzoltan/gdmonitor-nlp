@@ -23,5 +23,11 @@ public class DecreeInfo {
 	}
 	public void setDecreeNumber(String decreeNumber) {
 		this.decreeNumber = decreeNumber;
-	}		
+	}
+
+	@Override
+	public String toString() {
+		return "[" + pageNumber + ", " + decreeNumber + "]";
+	}
+		
 }

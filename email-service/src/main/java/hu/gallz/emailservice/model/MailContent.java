@@ -35,10 +35,10 @@ public class MailContent {
 //		this.bulletinPages = bulletinPages;
 //	}
 	
-	public List<DecreeInfo> getDecreeIfos() {
+	public List<DecreeInfo> getDecreeInfos() {
 		return decreeInfos;
 	}
-	public void setDecreeIfos(List<DecreeInfo> decreeInfos) {
+	public void setDecreeInfos(List<DecreeInfo> decreeInfos) {
 		this.decreeInfos = decreeInfos;
 	}
 //	public void addBulletinPage(Integer page){

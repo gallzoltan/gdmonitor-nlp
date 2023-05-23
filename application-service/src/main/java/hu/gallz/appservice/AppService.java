@@ -20,6 +20,7 @@ import hu.gallz.appservice.service.DownloadService;
 import hu.gallz.appservice.util.PersistProps;
 import hu.gallz.configuration.GdMonitorConfig;
 import hu.gallz.emailservice.EwsService;
+import hu.gallz.emailservice.model.DecreeInfo;
 import hu.gallz.emailservice.model.MailContent;
 
 @Service
@@ -68,8 +69,8 @@ public class AppService {
 					foundFeedMessages.add(feedMessage);
 			}
 			
-			logger.info("to examine: {}", feedMessages.size());
-			logger.info("examine: {}", foundFeedMessages.size());
+			logger.info("Megjelent közlöny: {}", feedMessages.size());
+			logger.info("Vizsgálandó közlöny: {}", foundFeedMessages.size());
 		}
 		
 		if(foundFeedMessages.size() > 0) {
@@ -89,9 +90,9 @@ public class AppService {
 			mailContent.setBulletinNumber(feed.getTitle());
 			mailContent.setPubDate(feed.getPubdate());
 			mailContent.setBulletinLink(feed.getLink());
-			feed.getPdfContents().forEach(c -> {
-				
-				mailContent.addBulletinPage(c.getPgnumber());
+			feed.getPdfContents().forEach(c -> {				
+				mailContent.addDecreeInfo(new DecreeInfo(c.getPgnumber(), c.getDecree()));
+				//mailContent.addBulletinPage(c.getPgnumber());
             });
 			HashMap<String, List<String>> mailToList = persistProps.readMailAddresses();		
 			if(ewsService.sendEmail(mailContent, mailToList)) {

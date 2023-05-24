@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class GdMonitorConfig {
 	
 	private Links links = new Links();
+	private Integer timeoffset;
     private String username;
     private String password;
     private String token;
@@ -50,6 +51,14 @@ public class GdMonitorConfig {
 
 	public void setLinks(Links links) {
 		this.links = links;
+	}
+
+	public Integer getTimeoffset() {
+		return timeoffset;
+	}
+
+	public void setTimeoffset(Integer timeoffset) {
+		this.timeoffset = timeoffset;
 	}
 
 	public String getUsername() {

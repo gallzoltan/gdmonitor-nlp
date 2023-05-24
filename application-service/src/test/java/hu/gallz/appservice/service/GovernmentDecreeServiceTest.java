@@ -21,6 +21,7 @@ public class GovernmentDecreeServiceTest {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GovernmentDecreeServiceTest.class);
 	private String f;
+	private int p;
 
 	@InjectMocks
 	private GovernmentDecreeService governmentDecreeService;
@@ -28,19 +29,25 @@ public class GovernmentDecreeServiceTest {
 	@BeforeEach 
     void init() {
 		//f = "/home/gallz/Letöltések/MK_23_075.pdf";
-		//f = "c:\\Users\\gallz\\Downloads\\MK_23_028.pdf";
+		
+		f = "c:\\Users\\gallz\\Downloads\\MK_23_028.pdf";
+		p = 35;
+		
 		//f = "c:\\Users\\gallz\\Downloads\\MK_23_076.pdf";
-		f = "c:\\Users\\gallz\\Downloads\\MK_23_067.pdf";
+		//p = 79;
+		
+		//f = "c:\\Users\\gallz\\Downloads\\MK_23_067.pdf";
+		//p = 27;
 	}
 	
-	//@Disabled("TODO: Still need to work on it")
+	@Disabled("TODO: Still need to work on it")
 	@Test
 	public void testThatFoundDecreeNumber() {		
 		Path path = Paths.get(f);
-		String result = governmentDecreeService.extractGovernmentDecree(path.toFile(), 27);
+		String result = governmentDecreeService.extractGovernmentDecree(path.toFile(), p);
 		logger.info("Decree number: {}", result);
 		
-		assertEquals(result, "A Kormány 1183/2023. (V. 8.) Korm. határozata");
+		assertEquals(result, "A Kormány 1050/2023. (II. 23.) Korm. határozata");
 	}
 	
 	@Disabled("TODO: Still need to work on it")

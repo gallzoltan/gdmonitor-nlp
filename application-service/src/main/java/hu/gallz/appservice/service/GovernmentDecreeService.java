@@ -17,6 +17,7 @@ import hu.gallz.appservice.util.StringConstants;
 
 @Service
 public class GovernmentDecreeService {
+	
 	private static final Logger logger = LoggerFactory.getLogger(GovernmentDecreeService.class);	
 	
 	public Set<Integer> findKeywords(File pdfFile){
@@ -32,7 +33,7 @@ public class GovernmentDecreeService {
 	            stripper.setEndPage(i);
 	            
 	            String content = stripper.getText(document).toLowerCase();
-				if (content.contains(StringConstants.SEARCH_1) || content.contains(StringConstants.SEARCH_2) || content.contains(StringConstants.SEARCH_3) || content.contains(StringConstants.SEARCH_4)) {
+				if (content.contains(StringConstants.SEARCH_1) || content.contains(StringConstants.SEARCH_2) || content.contains(StringConstants.SEARCH_3) || content.contains(StringConstants.SEARCH_4)) {					
 					foundPages.add(i);
 				}
 			}
@@ -45,18 +46,35 @@ public class GovernmentDecreeService {
 		return null;
 	}
 	
-	public String extractGovernmentDecree(File pdfFile, int startPage) {
+	public String extractGovernmentDecree(File pdfFile, int pageNumber) {
 		PDDocument document;
 		try {
 			PDFTextStripper stripper = new PDFTextStripper();
 			document = PDDocument.load(pdfFile);
 	        
-	        stripper.setStartPage(startPage);
-            stripper.setEndPage(startPage);
+	        stripper.setStartPage(pageNumber);
+            stripper.setEndPage(pageNumber);
             String pageText = stripper.getText(document);
+            document.close();
             
-	        document.close();
-	        return findDecreeNumber(pageText);
+            int keyWord1 = pageText.toLowerCase().indexOf(StringConstants.SEARCH_1, 0);
+            int keyWord2 = pageText.toLowerCase().indexOf(StringConstants.SEARCH_2, 0);
+            int keyWord3 = pageText.toLowerCase().indexOf(StringConstants.SEARCH_3, 0);
+            int keyWord4 = pageText.toLowerCase().indexOf(StringConstants.SEARCH_4, 0);
+            
+            if(keyWord1 > -1) {
+            	return findDecreeNumber(pageText, keyWord1);
+            }
+            if(keyWord2 > -1) {
+            	return findDecreeNumber(pageText, keyWord2);
+            }
+            if(keyWord3 > -1) {
+            	return findDecreeNumber(pageText, keyWord3);
+            }
+            if(keyWord4 > -1) {
+            	return findDecreeNumber(pageText, keyWord4);
+            }
+            
 		} catch (IOException e) {
 			logger.info("Pdf read error: {}", e.getMessage());
 		}
@@ -64,12 +82,12 @@ public class GovernmentDecreeService {
         return "";
 	}
 	
-	private String findDecreeNumber(String content) {
+	private String findDecreeNumber(String content, int keywordPosition) {
 	    Pattern pattern = Pattern.compile(StringConstants.REG_DECREE_NUMBER);
 	    Matcher matcher = pattern.matcher(content);
-	    String closestNumber = null;
+	    String closestNumber = "";
 	    int closestDistance = Integer.MAX_VALUE;
-	    int keywordPosition = Integer.MAX_VALUE;
+	    //int keywordPosition = Integer.MAX_VALUE;
 
 	    while (matcher.find()) {
 	        int matchStart = matcher.start();

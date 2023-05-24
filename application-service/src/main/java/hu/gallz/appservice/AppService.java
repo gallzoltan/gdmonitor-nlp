@@ -75,7 +75,7 @@ public class AppService {
 		if(foundFeedMessages.size() > 0) {
 			int sent = 0;
 			for(FeedMessage feed: foundFeedMessages) {
-				if(sendEmail(feed)) {
+				if(sendingEmail(feed)) {
 					sent++;
 				}
 			}
@@ -92,7 +92,7 @@ public class AppService {
 		return "end.";
 	}
 	
-	private Boolean sendEmail(FeedMessage feed) {
+	private Boolean sendingEmail(FeedMessage feed) {
 		MailContent mailContent = new MailContent();		
 		mailContent.setBulletinNumber(feed.getTitle());
 		mailContent.setPubDate(feed.getPubdate());

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import hu.gallz.appservice.model.Decree;
 import hu.gallz.appservice.model.FeedMessage;
-import hu.gallz.appservice.model.PdfContent;
 import hu.gallz.appservice.service.FeedService;
 import hu.gallz.appservice.service.GovernmentDecreeService;
 import hu.gallz.appservice.service.DownloadService;

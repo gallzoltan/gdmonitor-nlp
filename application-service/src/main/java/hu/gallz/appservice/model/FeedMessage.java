@@ -13,7 +13,7 @@ public class FeedMessage {
     private String pubdate; 
     private String pdfFile;
     private Path pdfPath;
-    private List<PdfContent> pdfContents;
+    private List<Decree> decrees;
     
 	public FeedMessage() {
 		super();
@@ -85,23 +85,18 @@ public class FeedMessage {
 		this.pdfPath = pdfPath;
 	}
 
-	public List<PdfContent> getPdfContents() {
-		return pdfContents;
+	public List<Decree> getDecrees() {
+		return decrees;
 	}
 
-	public void setPdfContents(List<PdfContent> pdfContents) {
-		this.pdfContents = pdfContents;
+	public void setDecrees(List<Decree> decrees) {
+		this.decrees = decrees;
 	}
 	
-	public void addPdfContent(PdfContent content) {
-		if(this.pdfContents==null)
-			this.pdfContents = new ArrayList<>();
-		this.pdfContents.add(content);
-	}
-
-	@Override
-	public String toString() {
-		return "FeedMessage [title=" + title + ", pubdate=" + pubdate + ", pdfFile=" + pdfFile + ", pdfContents=" + pdfContents + "]";
+	public void addDecree(Decree decree) {
+		if(this.decrees == null)
+			this.decrees = new ArrayList<>();
+		this.decrees.add(decree);
 	}
     
 }

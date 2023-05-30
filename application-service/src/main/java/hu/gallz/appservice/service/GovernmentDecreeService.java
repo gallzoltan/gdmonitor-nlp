@@ -2,7 +2,9 @@ package hu.gallz.appservice.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import hu.gallz.appservice.model.Decree;
 import hu.gallz.appservice.util.StringConstants;
 
 @Service
@@ -80,6 +83,51 @@ public class GovernmentDecreeService {
 		}
         
         return "";
+	}
+	
+	public List<Decree> extractDecreesFromPDF(File filePath) {
+		List<Decree> decrees = new ArrayList<>();
+		int numberOfPages = 0;
+		
+		int pageNumber = 0;
+		String decreeNumber = null;		
+		StringBuilder decreeText = new StringBuilder();		
+		
+        try {
+            PDDocument document = PDDocument.load(filePath);
+            PDFTextStripper stripper = new PDFTextStripper();
+            numberOfPages = document.getNumberOfPages();
+            
+            for(int i = 1; i <= numberOfPages; i++) {
+            	stripper.setStartPage(i);
+	            stripper.setEndPage(i);
+	            String content = stripper.getText(document);
+	            String[] lines = content.split("\\r?\\n"); // Sorok szétválasztása
+	            for (String line : lines) {
+	            	if (line.startsWith("A Kormány") && line.endsWith("Korm. határozata")) {
+	            		decreeNumber = line;
+	            		pageNumber = i;	            		
+	            	}
+	            	if(decreeNumber != null) {
+	            		decreeText.append(line).append(System.lineSeparator());
+	            	}
+	            	if (line.endsWith("Orbán Viktor s. k.,") && decreeNumber != null) {
+	            		Decree decree = new Decree(pageNumber, decreeNumber, decreeText.toString());
+	            		decrees.add(decree);
+	            		
+	            		decreeText.setLength(0); // Reset decreeText
+	            		decreeNumber = null;
+	            		pageNumber = 0;
+	            	}
+	            }
+            }
+
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return decrees;
 	}
 	
 	private String findDecreeNumber(String content, int keywordPosition) {

@@ -12,11 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hu.gallz.appservice.model.Decree;
 import hu.gallz.appservice.model.FeedMessage;
-import hu.gallz.appservice.model.PdfContent;
 import hu.gallz.appservice.service.FeedService;
 import hu.gallz.appservice.service.GovernmentDecreeService;
 import hu.gallz.appservice.service.DownloadService;
+import hu.gallz.appservice.util.DecreeIterator;
 import hu.gallz.appservice.util.PersistProps;
 import hu.gallz.configuration.GdMonitorConfig;
 import hu.gallz.emailservice.EwsService;
@@ -55,18 +56,15 @@ public class AppService {
 		
 		if(feedMessages.size() > 0 ) {
 			for(FeedMessage feedMessage: feedMessages) {
-				Boolean flag = false;
 				Set<Integer> foundPages = governmentDecreeService.findKeywords(feedMessage.getPdfPath().toFile());
 				if(foundPages != null) {
-					for(int pageNumber: foundPages) {
-						String decreeNumber = governmentDecreeService.extractGovernmentDecree(feedMessage.getPdfPath().toFile(), pageNumber);
-						PdfContent content = new PdfContent(pageNumber, decreeNumber, "");
-						feedMessage.addPdfContent(content);
-						flag = true;
+					List<Decree> decrees = governmentDecreeService.extractDecreesFromPDF(feedMessage.getPdfPath().toFile());
+					DecreeIterator decreeIterator = new DecreeIterator(decrees);
+					while (decreeIterator.hasNext()) {
+						feedMessage.addDecree(decreeIterator.next());
+						foundFeedMessages.add(feedMessage);
 					}
 				}
-				if(flag)
-					foundFeedMessages.add(feedMessage);
 			}
 			logger.info("Releváns / Megjelent közlöny: {}/{} db", foundFeedMessages.size(), feedMessages.size());
 		}
@@ -96,8 +94,8 @@ public class AppService {
 		mailContent.setBulletinNumber(feed.getTitle());
 		mailContent.setPubDate(feed.getPubdate());
 		mailContent.setBulletinLink(feed.getLink());
-		feed.getPdfContents().forEach(c -> {				
-			mailContent.addDecreeInfo(new DecreeInfo(c.getPgnumber(), c.getDecree()));
+		feed.getDecrees().forEach(c -> {				
+			mailContent.addDecreeInfo(new DecreeInfo(c.getPageNumber(), c.getDecreeNumber()));
         });
 		HashMap<String, List<String>> mailToList = persistProps.readMailAddresses();		
 		if(ewsService.sendEmail(mailContent, mailToList)) {

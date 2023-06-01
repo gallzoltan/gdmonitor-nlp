@@ -14,11 +14,11 @@ stop:
 start:
 	systemctl start $(SERVICE)
 
-build:	
-	mvn clean package		
+build:
+	mvn clean package
 
 run:
-	java -jar $(SOOURCE)/$(PROGNAME)
+	java -jar $(SOURCE)/$(PROGNAME)
 
 install:
 	mvn install
@@ -33,4 +33,4 @@ pull:
 	git pull origin master
 
 copy:
-	cp $(SOOURCE)/$(PROGNAME) $(DEST)
+	cp $(SOURCE)/$(PROGNAME) $(DEST)

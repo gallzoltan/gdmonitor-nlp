@@ -48,7 +48,7 @@ public class AppService {
 	private EwsService ewsService;
 	
 //	@Autowired
-//	private NlpService nlpService;
+//	private NlpService nlpService;	
 
 	public String startService() {
 		List<FeedMessage> feedMessages = searchFeedMessages();

@@ -1,5 +1,5 @@
 # Makefile
-SERVICE = gdmonitor.service
+SERVICE = gdm.service
 PROGNAME = application-0.0.1-SNAPSHOT.jar
 SOURCE = ./application/target
 DEST = /opt/gdmonitor

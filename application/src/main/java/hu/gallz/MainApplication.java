@@ -15,14 +15,14 @@ public class MainApplication implements CommandLineRunner {
 	private static final Logger logger = LoggerFactory.getLogger(MainApplication.class);
 	
 	@Autowired
-	private AppService appService;
+	private AppService appService;	
 		
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(String... args) throws Exception {		
 		logger.info("Console: started");
 		logger.info("AppService: {}", appService.startService());
 		

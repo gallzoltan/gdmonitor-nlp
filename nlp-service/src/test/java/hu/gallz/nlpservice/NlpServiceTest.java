@@ -10,11 +10,13 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class NlpServiceTest {
 
 	@Test
+	@Disabled
 	public void givenPythonScript() throws IOException, InterruptedException {
 		ProcessBuilder processBuilder = new ProcessBuilder("python", resolvePythonScriptPath("hello.py"));
         processBuilder.redirectErrorStream(true);

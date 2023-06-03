@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import hu.gallz.configuration.GdMonitorConfig;
 import microsoft.exchange.webservices.data.core.ExchangeService;
@@ -23,9 +24,13 @@ public class EwsConfig {
 	
 	@Autowired
 	private GdMonitorConfig config;	
+	@Autowired
+    private Environment env;
 
     @Bean("ews")
     ExchangeService ewsMailService() {
+    	logger.info("env: {}", env.getProperty("EWS_TOKEN"));
+    	logger.info("config env: {}", config.getToken());
         ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(ewsCredentials().get("user"), ewsCredentials().get("pass"));
         service.setCredentials(credentials);
@@ -40,7 +45,15 @@ public class EwsConfig {
     
     private HashMap<String, String> ewsCredentials(){
     	HashMap<String, String> result = new HashMap<String, String>();
-    	byte[] decodedBytes = Base64.getDecoder().decode(config.getToken());
+    	String test = config.getToken();
+    	byte[] decodedBytes;
+    	if(!test.equals("${EWS_TOKEN}")) {
+    		//byte[] decodedBytes = Base64.getDecoder().decode(env.getProperty("EWS_TOKEN"));
+    		decodedBytes = Base64.getDecoder().decode(test);    		
+    	} else {
+    		decodedBytes = Base64.getDecoder().decode("em9sdGFuLmdhbGxAYm0uZ292Lmh1OjEyMzQ1Ng==");
+    	}
+    	
 		
     	String decodedString = new String(decodedBytes);
 		String[] splited = decodedString.split(":");

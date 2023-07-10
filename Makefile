@@ -2,17 +2,17 @@
 SERVICE = gdm.service
 PROGNAME = application-0.0.1-SNAPSHOT.jar
 SOURCE = ./application/target
-DEST = /opt/gdmonitor
+DEST = /opt/gdmonitornlp
 
 default: build
 
 all: pull stop build copy start
 
 stop:
-	systemctl stop $(SERVICE)
+	sudo systemctl stop $(SERVICE)
 
 start:
-	systemctl start $(SERVICE)
+	sudo systemctl start $(SERVICE)
 
 build:
 	mvn clean package

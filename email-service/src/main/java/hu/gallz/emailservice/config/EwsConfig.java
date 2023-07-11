@@ -29,8 +29,9 @@ public class EwsConfig {
 
     @Bean("ews")
     ExchangeService ewsMailService() {
-    	logger.info("env: {}", env.getProperty("EWS_TOKEN"));
+    	logger.info("property env: {}", env.getProperty("EWS_TOKEN"));
     	logger.info("config env: {}", config.getToken());
+    	logger.info("system env: {}", System.getenv("EWS_TOKEN"));
         ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(ewsCredentials().get("user"), ewsCredentials().get("pass"));
         service.setCredentials(credentials);
@@ -44,17 +45,17 @@ public class EwsConfig {
     }
     
     private HashMap<String, String> ewsCredentials(){
-    	HashMap<String, String> result = new HashMap<String, String>();
-    	String test = config.getToken();
-    	byte[] decodedBytes;
-    	if(!test.equals("${EWS_TOKEN}")) {
-    		//byte[] decodedBytes = Base64.getDecoder().decode(env.getProperty("EWS_TOKEN"));
-    		decodedBytes = Base64.getDecoder().decode(test);    		
-    	} else {
-    		decodedBytes = Base64.getDecoder().decode("em9sdGFuLmdhbGxAYm0uZ292Lmh1OjEyMzQ1Ng==");
-    	}
-    	
-		
+    	HashMap<String, String> result = new HashMap<String, String>();    	    
+    	byte[] decodedBytes = Base64.getDecoder().decode(System.getenv("EWS_TOKEN"));
+
+//    	String test = config.getToken();
+//    	byte[] decodedBytes;
+//    	if(!test.equals("${EWS_TOKEN}")) {    		
+//    		decodedBytes = Base64.getDecoder().decode(test);    		
+//    	} else {
+//    		decodedBytes = Base64.getDecoder().decode("em9sdGFuLmdhbGxAYm0uZ292Lmh1OjEyMzQ1Ng==");
+//    	}
+    			
     	String decodedString = new String(decodedBytes);
 		String[] splited = decodedString.split(":");
 		
